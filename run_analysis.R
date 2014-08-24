@@ -60,7 +60,7 @@ tidyData[,90] = NULL
 tidyData[,89] = NULL
 
 # write out the tidy data
-write.table(tidyData, "tidyData.txt", sep="\t")
+write.table(tidyData, "tidyData.txt", sep="\t", row.name=FALSE)
 
 
 
