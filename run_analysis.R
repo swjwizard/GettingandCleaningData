@@ -6,7 +6,7 @@
 ###################################################
 
 ## Setting the working directory
-setwd("E:/CourseraDataScience/Getting and Cleaning Data")
+setwd("E:/CourseraDataScience/GettingandCleaningData")
 
 ## reading the training data into one "training" data frame
 trainingData = read.table("UCI HAR Dataset/train/X_train.txt", sep="")
@@ -33,17 +33,18 @@ allData = rbind(trainingData, testData)
 
 # Only get the data for Mean and StdDev.
 colsNeeded <- grep(".*Mean.*|.*StdDev.*", features[,2])
-# First reduce the features table to what we want
+# Select only the features needed
 features <- features[colsNeeded,]
-# Now add the last two columns (subject and activity)
+# Append the subject and activity column
 colsNeeded <- c(colsNeeded, 562, 563)
-)
-# And remove the unwanted columns from allData
+
+# And remove the columns we don't want from allData
 allData <- allData[,colsNeeded]
 # Add the column names (features) to allData
 colnames(allData) <- c(features$V2, "Activity", "Subject")
 colnames(allData) <- tolower(colnames(allData))
 
+# applying the correct activity label for each activity code
 currentActivity = 1
 for (currentActivityLabel in activityLabels$V2) {
   allData$activity <- gsub(currentActivity, currentActivityLabel, allData$activity)
@@ -57,6 +58,8 @@ tidyData = aggregate(allData, by=list(activity = allData$activity, subject=allDa
 # Removing the subject and activity columns
 tidyData[,90] = NULL
 tidyData[,89] = NULL
+
+# write out the tidy data
 write.table(tidyData, "tidyData.txt", sep="\t")
 
 
